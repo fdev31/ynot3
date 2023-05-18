@@ -10,7 +10,7 @@ from . import shapes
 STATUS_HEIGHT = 40
 DEFAULT_COLOR = (255, 255, 0)
 # Nice orange
-SELECTED_COLOR = (255, 90, 0)
+SELECTED_COLOR = (245, 130, 48)
 
 OUTPUT_FILENAME = os.environ.get("ANNOTATED", "/tmp/annotated.jpg")
 
@@ -116,12 +116,13 @@ class StatusBar:
     separation = 20
     # List of distinctive colors
     available_colors = [
-        (255, 0, 0),
-        (0, 255, 0),
-        (0, 0, 255),
-        (0, 255, 255),
-        (255, 255, 0),
-        (255, 0, 255),
+        (128, 0, 0),
+        (230, 25, 75),
+        (255, 255, 25),
+        (60, 180, 75),
+        (70, 240, 240),
+        (240, 50, 230),
+        (0, 130, 200),
         (255, 255, 255),
         (0, 0, 0),
     ]
