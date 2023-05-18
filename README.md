@@ -16,7 +16,7 @@ Supported shapes:
 - rectangles
 - arrows
 
-## Screenshot
+## Documentation / annotation example
 
 ![](https://raw.githubusercontent.com/fdev31/ynot3/main/img/annotated.png)
 
@@ -32,6 +32,8 @@ Supported shapes:
         - override setting the `ANNOTATED` environment variable
     - *(10)* toggle large mode (everything is magnified)
     - *(11)* clear changes (remove all annotations) (shortcut: "c")
+
+Note: *(12)* is only here to demonstrate arrows usage
 
 ## Example usage
 
