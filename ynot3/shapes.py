@@ -30,7 +30,6 @@ class Shape:
         end: tuple[int, int] | list[int],
         isDummy=False,
     ):
-        self.name = self._name
         self.color = color
         self.start = start
         self.end = end
@@ -53,16 +52,6 @@ class Shape:
     def rect(self):
         return pygame.Rect(
             self.start, (self.end[0] - self.start[0], self.end[1] - self.start[1])
-        )
-
-    @property
-    def super_rect(self):
-        return pygame.Rect(
-            self.start,
-            (
-                (self.end[0] - self.start[0]) * SUPERSAMPLE,
-                (self.end[1] - self.start[1]) * SUPERSAMPLE,
-            ),
         )
 
     def draw(self, surface: pygame.Surface):
@@ -188,11 +177,6 @@ class Bullet(Shape):
     @property
     def corrected_size(self):
         return self.size * SUPERSAMPLE
-
-    @property
-    def relative_rect(self):
-        sz = self.corrected_size
-        return pygame.Rect((0, 0), (sz, sz))
 
     def draw(self, surface):
         if WIDGET_SCALE != self._old_scale:

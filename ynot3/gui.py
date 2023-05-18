@@ -1,9 +1,7 @@
 import os
-import io
 import pygame
-import subprocess
 
-from .widgets import Button, StatusBar
+from .widgets import StatusBar
 from .buttons import BigSmallBut, SaveBut, CopyBut, BackBut, ClearBut
 from . import shapes
 
@@ -22,7 +20,7 @@ class Snap:
 class GUI:
     statusbar_height = 40
 
-    def __init__(self, background):
+    def __init__(self, background: pygame.Surface) -> None:
         self.objects: list[shapes.Shape] = []
         self.dragging = False
         self.canvas: None | pygame.Surface = None
