@@ -18,7 +18,7 @@ Supported shapes:
 
 ## Screenshot
 
-![](https://github.com/fdev31/ynot3/blob/0e68c2eca32b6ba8b324b9822a188fa9fce089ec/img/annotated.jpg)
+![](https://raw.githubusercontent.com/fdev31/ynot3/main/img/annotated.png)
 
 1. Active tool
     - *(4)* rectangle
