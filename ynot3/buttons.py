@@ -28,7 +28,7 @@ class SaveBut(Button):
         super().__init__(gui, "")
 
     def execute(self):
-        pygame.image.save(self.gui.canvas, OUTPUT_FILENAME)
+        pygame.image.save(self.gui.get_annotated_image(), OUTPUT_FILENAME)
 
 
 class CopyBut(Button):
@@ -46,7 +46,7 @@ class CopyBut(Button):
                 stdin=subprocess.PIPE,
             )
         buffer = io.BytesIO()
-        pygame.image.save(self.gui.canvas, buffer, "png")
+        pygame.image.save(self.gui.get_annotated_image(), buffer, "png")
         proc.communicate(input=buffer.getvalue())
 
 

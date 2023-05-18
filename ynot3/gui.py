@@ -46,11 +46,17 @@ class GUI:
             )
         )
 
-        self.background = background.convert_alpha()
+        self.background = background
         self.statusbar = StatusBar(self.screen, buttons, self.statusbar_height)
         self.annotation_overlay = pygame.Surface(
             self.background.get_size(), pygame.SRCALPHA
         ).convert_alpha()
+
+    def get_annotated_image(self):
+        surface = pygame.Surface(self.background.get_size(), pygame.SRCALPHA)
+        surface.blit(self.background, (0, 0))
+        surface.blit(self.annotation_overlay, (0, 0))
+        return surface
 
     def handle_event(self, event):
         if event.pos[1] < self.statusbar_height:
