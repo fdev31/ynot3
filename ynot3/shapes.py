@@ -14,7 +14,7 @@ def make_color_shape(color: tuple[int, int, int], width: int, height: int):
     h = height * SUPERSAMPLE
     surf = pygame.Surface((w, h), pygame.SRCALPHA)
     surf.fill(list(color) + [0])
-    pygame.draw.circle(surf, color, (w / 2, h / 2), int(0.45 * w))
+    pygame.draw.circle(surf, color, (w / 2, h / 2), int(0.4 * w))
     return pygame.transform.smoothscale(surf, (width, height))
 
 
