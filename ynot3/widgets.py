@@ -98,7 +98,6 @@ class StatusBar:
 
     def draw(self):
         # Draw the status bar background
-        pygame.draw.rect(self.screen, GREY, self.rect)
 
         icon_counter = itertools.count(0)
 
@@ -142,4 +141,4 @@ class StatusBar:
                 # detect if shape is under cursor
                 if shape.rect.collidepoint(event.pos):
                     self.icon_action(idx)
-                    break
+                    return True

@@ -2,6 +2,7 @@ import os
 import pygame
 
 from .widgets import StatusBar
+from .colors import GREY
 from .buttons import BigSmallBut, SaveBut, CopyBut, BackBut, ClearBut
 from . import shapes
 
@@ -27,6 +28,8 @@ class GUI:
         self.but_save = SaveBut(self)
         self.but_clear = ClearBut(self)
         self.but_copy = CopyBut(self)
+        self.dirty_statusbar = True
+        self.dirty_annotation = True
         buttons = [
             self.but_undo,
             self.but_copy,
@@ -47,7 +50,12 @@ class GUI:
         )
 
         self.background = background
-        self.statusbar = StatusBar(self.screen, buttons, self.statusbar_height)
+        self.statusbar_surface = pygame.Surface(
+            (self.screen.get_width(), self.statusbar_height), pygame.SRCALPHA
+        ).convert_alpha()
+        self.statusbar = StatusBar(
+            self.statusbar_surface, buttons, self.statusbar_height
+        )
         self.annotation_overlay = pygame.Surface(
             self.background.get_size(), pygame.SRCALPHA
         ).convert_alpha()
@@ -60,8 +68,8 @@ class GUI:
 
     def handle_event(self, event):
         if event.pos[1] < self.statusbar_height:
-            return self.statusbar.handle_event(event)
-
+            if self.statusbar.handle_event(event):
+                self.dirty_statusbar = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # left mouse button
                 self.dragging = True
@@ -75,6 +83,7 @@ class GUI:
                     end=start_pos,
                 )
                 self.objects.append(shape)
+                self.dirty_annotation = True
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:  # left mouse button
                 if self.dragging:
@@ -82,22 +91,31 @@ class GUI:
                     pos[1] -= self.statusbar_height
                     self.objects[-1].end = pos
                     self.dragging = False
+                    self.dirty_annotation = True
         elif event.type == pygame.MOUSEMOTION:
             if self.dragging:
                 pos = list(event.pos)
                 pos[1] -= self.statusbar_height
                 if self.objects:
                     self.objects[-1].end = pos
+                    self.dirty_annotation = True
 
     def draw(self):
-        self.statusbar.draw()
-        self.screen.blit(self.background, (0, self.statusbar_height))
-        self.annotation_overlay.fill((0, 0, 0, 0))
+        if self.dirty_statusbar:
+            self.statusbar_surface.fill(GREY)
+            self.statusbar.draw()
+            self.screen.blit(self.statusbar_surface, (0, 0))
+            self.dirty_statusbar = False
 
-        for shape in self.objects:
-            shape.draw(self.annotation_overlay)
+        if self.dirty_annotation:
+            self.screen.blit(self.background, (0, self.statusbar_height))
+            self.annotation_overlay.fill((0, 0, 0, 0))
 
-        self.screen.blit(self.annotation_overlay, (0, self.statusbar_height))
+            for shape in self.objects:
+                shape.draw(self.annotation_overlay)
+
+            self.screen.blit(self.annotation_overlay, (0, self.statusbar_height))
+            self.dirty_annotation = False
 
         pygame.display.update()
 
@@ -136,14 +154,19 @@ def main(image_path: str):
                             running = False
                         elif event.key == pygame.K_c:
                             gui.but_clear.execute()
+                            gui.dirty_annotation = True
                         elif event.key == pygame.K_BACKSPACE:
                             gui.but_undo.execute()
+                            gui.dirty_annotation = True
                         elif event.key == pygame.K_r:
                             gui.statusbar.selected_shape = shapes.Rectangle
+                            gui.dirty_statusbar = True
                         elif event.key == pygame.K_a:
                             gui.statusbar.selected_shape = shapes.Arrow
+                            gui.dirty_statusbar = True
                         elif event.key == pygame.K_e:
                             gui.statusbar.selected_shape = shapes.Bullet
+                            gui.dirty_statusbar = True
 
         # Update the screen
         gui.draw()

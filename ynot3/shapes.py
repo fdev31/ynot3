@@ -292,10 +292,10 @@ class Rectangle(Shape):
     def draw(self, surface):
         if self.isDummy:
             rect = self.rect.copy()
-            rect.width -= 3
-            rect.height -= 3
-            rect.x += 2
-            rect.y += 2
+            rect.width -= 6
+            rect.height -= 6
+            rect.x += 3
+            rect.y += 3
             pygame.draw.rect(surface, self.color, rect, width=2)
         else:
             pygame.draw.rect(
