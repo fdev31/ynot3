@@ -8,7 +8,7 @@ from .colors import BLACK, WHITE, GREY
 from . import shapes
 
 STATUS_HEIGHT = 40
-DEFAULT_COLOR = (255, 255, 0)
+DEFAULT_COLOR = (255, 255, 25)
 # Nice orange
 SELECTED_COLOR = (245, 130, 48)
 
