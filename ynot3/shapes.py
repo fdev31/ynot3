@@ -22,6 +22,8 @@ def make_color_shape(color: tuple[int, int, int], width: int, height: int):
 class Shape:
     _name = "unknown"
     _surface = None
+    shadow = (3 * SUPERSAMPLE, 3 * SUPERSAMPLE)
+    shadow_color = (50, 50, 50, 200)
 
     def __init__(
         self,
@@ -116,6 +118,41 @@ class Arrow(Shape):
                     * SUPERSAMPLE
                     * (WIDGET_SCALE * 0.5 if WIDGET_SCALE > 1 else 1)
                 )
+            # shadow
+            if not self.isDummy:
+                pygame.draw.polygon(
+                    self._ssurface,
+                    self.shadow_color,
+                    (
+                        end_point,
+                        (
+                            (end_point[0] - sz * math.cos(angle - math.pi / 6))
+                            - self.shadow[0],
+                            (end_point[1] - sz * math.sin(angle - math.pi / 6))
+                            + self.shadow[1],
+                        ),
+                        (
+                            (end_point[0] - sz * math.cos(angle + math.pi / 6))
+                            - self.shadow[0],
+                            (end_point[1] - sz * math.sin(angle + math.pi / 6))
+                            + self.shadow[1],
+                        ),
+                    ),
+                )
+                sline_length = line_length - (sz // 2)
+                send_point = (
+                    int(start[0] - self.shadow[0] + sline_length * math.cos(angle)),
+                    int(start[1] + self.shadow[1] + sline_length * math.sin(angle)),
+                )
+                # Draw the line from start to end
+                pygame.draw.line(
+                    self._ssurface,
+                    self.shadow_color,
+                    start,
+                    send_point,
+                    self.thickness * WIDGET_SCALE * SUPERSAMPLE + 5,
+                )
+            # real shape
             # Draw a circle t point A
             pygame.draw.circle(
                 self._ssurface,
@@ -209,6 +246,13 @@ class Bullet(Shape):
             corrected_rect[0] += border_sz // 2
             corrected_rect[1] += border_sz // 2
 
+            if not self.isDummy:  # draw shadow
+                pygame.draw.circle(
+                    supersampled_surface,
+                    self.shadow_color,
+                    (corrected_rect.center[0] - 4, corrected_rect.center[1] + 4),
+                    (side // 2),
+                )
             pygame.draw.circle(
                 supersampled_surface, self.inv_color, corrected_rect.center, (side // 2)
             )
