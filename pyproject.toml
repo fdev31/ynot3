@@ -5,6 +5,7 @@ description = "An image annotator for Xorg & Wayland using pygame"
 authors = ["fdev31 <fdev31@gmail.com>"]
 license = "GPL"
 readme = "README.md"
+homepage = 'https://github.com/fdev31/ynot3'
 
 [tool.poetry.scripts]
 ynot3 = 'ynot3:run'
