@@ -281,7 +281,6 @@ class GUI:
                     self.objects[-1].end = pos
 
     def draw(self):
-        #         print("******************************************")
         self.status_bar.draw()
 
         surf = self.background.copy()
