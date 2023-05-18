@@ -58,6 +58,7 @@ class BackBut(Button):
         if self.gui.objects:
             self.gui.objects[-1].instance_removed()
             self.gui.objects = self.gui.objects[:-1]
+            self.gui.dirty_annotation = True
 
 
 class ClearBut(Button):
@@ -69,3 +70,4 @@ class ClearBut(Button):
             obj.instance_removed()
             # Clear all the shapes
         self.gui.objects = []
+        self.gui.dirty_annotation = True

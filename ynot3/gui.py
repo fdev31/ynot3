@@ -155,10 +155,8 @@ def main(image_path: str):
                             running = False
                         elif event.key == pygame.K_c:
                             gui.but_clear.execute()
-                            gui.dirty_annotation = True
                         elif event.key == pygame.K_BACKSPACE:
                             gui.but_undo.execute()
-                            gui.dirty_annotation = True
                         elif event.key == pygame.K_r:
                             gui.statusbar.selected_shape = shapes.Rectangle
                             gui.dirty_statusbar = True
