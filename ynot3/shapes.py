@@ -240,11 +240,13 @@ class Bullet(Shape):
             pos[0] -= text_size[0] // 2
             pos[1] -= text_size[1] // 2
             supersampled_surface.blit(self.text, pos)
-            sz = self.size * 2 - 2 if self.isDummy else self.size * WIDGET_SCALE * 2
+            sz = self.rect.size[0] if self.isDummy else (self.size * WIDGET_SCALE * 2)
             self._surface = pygame.transform.smoothscale(supersampled_surface, (sz, sz))
 
         if self.isDummy:
-            surface.blit(self._surface, [i - 1 for i in self.rect.topleft])
+            surface.blit(
+                self._surface, [i - self.rect.width // 2 for i in self.rect.center]
+            )
         else:
             surface.blit(
                 self._surface,
