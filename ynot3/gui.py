@@ -134,10 +134,13 @@ class StatusBar:
         return 20
 
     @classmethod
+    def estimateWidth(cls, buttons, icon_size):
+        nb_icons = len(buttons) + len(cls.available_colors) + len(cls.available_shapes)
+        return icon_size * nb_icons + cls.margin * (nb_icons - 4) + 2 * cls.separation
+
+    @classmethod
     def fitsScreen(cls, width, buttons, icon_size):
-        return not width < icon_size * (
-            len(buttons) + len(cls.available_colors) + len(cls.available_shapes)
-        ) + (cls.separation * 2)
+        return not width < cls.estimateWidth(buttons, icon_size)
 
     def __init__(self, screen, buttons=[]):
         self.screen = screen
@@ -243,7 +246,10 @@ class GUI:
         bg_rect = background.get_rect()
         STATUS_HEIGHT = StatusBar.getHeight(bg_rect.width, buttons)
         self.screen = pygame.display.set_mode(
-            (bg_rect.width, bg_rect.height + STATUS_HEIGHT)
+            (
+                max(bg_rect.width, StatusBar.estimateWidth(buttons, STATUS_HEIGHT)),
+                bg_rect.height + STATUS_HEIGHT,
+            )
         )
 
         self.background = background.convert_alpha()
