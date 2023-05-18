@@ -35,6 +35,18 @@ Supported shapes:
 
 Note: *(12)* is only here to demonstrate arrows usage
 
+## Installation
+
+```
+pip install ynot3
+```
+
+Or, on Archlinux:
+
+```
+yay -S ynot3
+```
+
 ## Example usage
 
 ### Edit an existing image
