@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "ynot3"
+version = "1.0.0"
+description = "An image annotator for Xorg & Wayland using pygame"
+authors = ["fdev31 <fdev31@gmail.com>"]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.scripts]
+ynot3 = 'ynot3:run'
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pygame = "^2.4.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.3.0"
+vulture = "^2.7"
+typing = "^3.10.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
