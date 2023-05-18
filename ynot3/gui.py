@@ -12,7 +12,18 @@ DEFAULT_COLOR = (255, 255, 0)
 # Nice orange
 SELECTED_COLOR = (255, 128, 0)
 
-OUTPUT_FILENAME = "/tmp/annotated.jpg"
+OUTPUT_FILENAME = os.environ.get("ANNOTATED", "/tmp/annotated.jpg")
+
+
+class Snap:
+    level = int(os.environ.get("SNAPPING", 8))
+
+    @classmethod
+    def getSnapped(cls, coord):
+        l = cls.level
+        if not l:
+            return list(coord)
+        return [((l // 2 + coord[0]) // l) * l, ((l // 2 + coord[1]) // l) * l]
 
 
 class Icon:
@@ -245,7 +256,7 @@ class GUI:
                 self.dragging = True
 
                 # Add a shape to the list of shapes
-                start_pos = list(event.pos)
+                start_pos = Snap.getSnapped(event.pos)
                 start_pos[1] -= STATUS_HEIGHT
                 shape = self.status_bar.selected_shape(
                     color=self.status_bar.selected_color,
@@ -256,7 +267,7 @@ class GUI:
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:  # left mouse button
                 if self.dragging:
-                    pos = list(event.pos)
+                    pos = Snap.getSnapped(event.pos)
                     pos[1] -= STATUS_HEIGHT
                     self.objects[-1].end = pos
                     self.dragging = False

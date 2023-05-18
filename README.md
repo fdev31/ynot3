@@ -7,6 +7,7 @@ Targetting an efficient workflow and minimal dependencies.
 - copy to clipboard on exit
 - unlimited undo
 - antialiasing
+- snapping for better alignments (override setting `SNAPPING` environment variable, defaults to 8)
 - very simple user interface
 
 Supported shapes:
@@ -27,7 +28,7 @@ Supported shapes:
 3. Action buttons
     - *(7)* undo
     - *(8)* copy to clipboard
-    - *(9)* save to `/tmp/annotated.jpg`
+    - *(9)* save to `/tmp/annotated.jpg` (override setting `ANNOTATED` environment variable)
     - *(10)* toggle large mode (everything is magnified)
     - *(11)* clear changes (remove all annotations)
 
