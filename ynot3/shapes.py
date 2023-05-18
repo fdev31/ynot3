@@ -23,7 +23,7 @@ class Shape:
     _name = "unknown"
     _surface = None
     shadow = (3 * SUPERSAMPLE, 3 * SUPERSAMPLE)
-    shadow_color = (50, 50, 50, 200)
+    shadow_color = (0, 0, 0, 150)
 
     def __init__(
         self,
@@ -101,7 +101,7 @@ class Arrow(Shape):
                 )
                 self._ssurface = supersampled_surface
             else:
-                self._ssurface.fill(list(self.color) + [0])
+                self._ssurface.fill((0, 0, 0, 0))
 
             # Calculate the endpoint of the line from start to end
             line_length = math.sqrt((end[1] - start[1]) ** 2 + (end[0] - start[0]) ** 2)
@@ -241,7 +241,7 @@ class Bullet(Shape):
             supersampled_surface = pygame.Surface(
                 (side + border_sz, side + border_sz), pygame.SRCALPHA
             )
-            supersampled_surface.fill(list(self.inv_color) + [0])
+            supersampled_surface.fill((0, 0, 0, 0))
             corrected_rect = pygame.Rect(0, 0, side, side)
             corrected_rect[0] += border_sz // 2
             corrected_rect[1] += border_sz // 2
