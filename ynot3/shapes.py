@@ -25,9 +25,9 @@ class Shape:
 
     def __init__(
         self,
-        color: tuple[int, int, int],
-        start: tuple[int, int],
-        end: tuple[int, int],
+        color: tuple[int, int, int] | list[int],
+        start: tuple[int, int] | list[int],
+        end: tuple[int, int] | list[int],
         isDummy=False,
     ):
         self.name = self._name
