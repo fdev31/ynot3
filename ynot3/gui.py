@@ -10,7 +10,7 @@ from . import shapes
 STATUS_HEIGHT = 40
 DEFAULT_COLOR = (255, 255, 0)
 # Nice orange
-SELECTED_COLOR = (255, 128, 0)
+SELECTED_COLOR = (255, 90, 0)
 
 OUTPUT_FILENAME = os.environ.get("ANNOTATED", "/tmp/annotated.jpg")
 
@@ -203,9 +203,11 @@ class StatusBar:
                 pygame.draw.rect(
                     self.screen, SELECTED_COLOR, icon.rect, border_radius=radius
                 )
-            pygame.draw.circle(
-                self.screen, color, icon.rect.center, icon.rect.width // 2 - 2
-            )
+            if not getattr(icon, "surface", None):
+                icon.surface = shapes.make_color_shape(
+                    color, icon.rect.width, icon.rect.height
+                )
+            self.screen.blit(icon.surface, icon.rect)
 
         for but in self.available_buttons:
             idx = next(icon_counter)

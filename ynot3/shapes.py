@@ -9,6 +9,15 @@ SUPERSAMPLE = 4
 OUTPUT_FILENAME = "/tmp/annotated.jpg"
 
 
+def make_color_shape(color: tuple[int, int, int], width: int, height: int):
+    w = width * SUPERSAMPLE
+    h = height * SUPERSAMPLE
+    surf = pygame.Surface((w, h), pygame.SRCALPHA)
+    surf.fill(list(color) + [0])
+    pygame.draw.circle(surf, color, (w / 2, h / 2), int(0.45 * w))
+    return pygame.transform.smoothscale(surf, (width, height))
+
+
 class Shape:
     _name = "unknown"
     _surface = None
