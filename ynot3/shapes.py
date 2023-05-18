@@ -18,13 +18,13 @@ class Shape:
         color: tuple[int, int, int],
         start: tuple[int, int],
         end: tuple[int, int],
-        isFake=False,
+        isDummy=False,
     ):
         self.name = self._name
         self.color = color
         self.start = start
         self.end = end
-        self.isFake = isFake
+        self.isDummy = isDummy
 
     @property
     def inv_color(self):
@@ -73,7 +73,7 @@ class Arrow(Shape):
 
     @property
     def fixed_size(self):
-        if self.isFake:
+        if self.isDummy:
             return self.arrowhead_size
         else:
             return self.arrowhead_size * WIDGET_SCALE
@@ -85,7 +85,7 @@ class Arrow(Shape):
         if not self._surface or self._old_pos != (start, end, WIDGET_SCALE):
             self._old_pos = (start, end, WIDGET_SCALE)
 
-            if self.isFake:
+            if self.isDummy:
                 # add some padding
                 end[0] -= 5
                 end[1] -= 5
@@ -109,7 +109,7 @@ class Arrow(Shape):
                 int(start[1] + line_length * math.sin(angle)),
             )
 
-            if self.isFake:
+            if self.isDummy:
                 sz = int(self.fixed_size * SUPERSAMPLE * 0.7)
             else:
                 sz = (
@@ -122,7 +122,7 @@ class Arrow(Shape):
                 self._ssurface,
                 self.color,
                 start,
-                2 * (1 if self.isFake else WIDGET_SCALE * SUPERSAMPLE),
+                2 * (1 if self.isDummy else WIDGET_SCALE * SUPERSAMPLE),
             )
             # Draw the arrowhead at point B
             pygame.draw.polygon(
@@ -151,7 +151,7 @@ class Arrow(Shape):
                 self.color,
                 start,
                 end_point,
-                self.thickness * (2 if self.isFake else WIDGET_SCALE * SUPERSAMPLE),
+                self.thickness * (2 if self.isDummy else WIDGET_SCALE * SUPERSAMPLE),
             )
             self._surface = pygame.transform.smoothscale(
                 self._ssurface, surface.get_size()
@@ -166,7 +166,7 @@ class Bullet(Shape):
 
     def __init__(self, *a, **k):
         super().__init__(*a, **k)
-        if not self.isFake:
+        if not self.isDummy:
             Bullet._counter += 1
         self.counter = Bullet._counter
         self._old_scale = 0
@@ -190,12 +190,14 @@ class Bullet(Shape):
                 "Arial",
                 48
                 * (
-                    1 if self.isFake else (WIDGET_SCALE // 2 if WIDGET_SCALE > 1 else 1)
+                    1
+                    if self.isDummy
+                    else (WIDGET_SCALE // 2 if WIDGET_SCALE > 1 else 1)
                 ),
                 bold=True,
             )
             self.text = self._font.render(
-                "2" if self.isFake else str(self.counter), True, self.inv_color
+                "2" if self.isDummy else str(self.counter), True, self.inv_color
             )
             self._surface = None
 
@@ -228,10 +230,10 @@ class Bullet(Shape):
             pos[0] -= text_size[0] // 2
             pos[1] -= text_size[1] // 2
             supersampled_surface.blit(self.text, pos)
-            sz = self.size * 2 - 2 if self.isFake else self.size * WIDGET_SCALE * 2
+            sz = self.size * 2 - 2 if self.isDummy else self.size * WIDGET_SCALE * 2
             self._surface = pygame.transform.smoothscale(supersampled_surface, (sz, sz))
 
-        if self.isFake:
+        if self.isDummy:
             surface.blit(self._surface, [i - 1 for i in self.rect.topleft])
         else:
             surface.blit(
@@ -248,7 +250,7 @@ class Rectangle(Shape):
     thickness = 3
 
     def draw(self, surface):
-        if self.isFake:
+        if self.isDummy:
             rect = self.rect.copy()
             rect.width -= 3
             rect.height -= 3
@@ -260,7 +262,7 @@ class Rectangle(Shape):
                 surface,
                 self.color,
                 self.rect,
-                width=1 if self.isFake else self.thickness * WIDGET_SCALE,
+                width=1 if self.isDummy else self.thickness * WIDGET_SCALE,
             )
 
     @property

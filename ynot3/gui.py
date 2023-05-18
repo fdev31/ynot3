@@ -192,7 +192,7 @@ class StatusBar:
                     color=BLACK,
                     start=icon.rect.topleft,
                     end=icon.rect.bottomright,
-                    isFake=True,
+                    isDummy=True,
                 )
             icon.shape.draw(self.screen)
 
