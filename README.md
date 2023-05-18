@@ -26,11 +26,11 @@ Supported shapes:
     - *(6)* enumerated bullet
 2. Active color
 3. Action buttons
-    - *(7)* undo
+    - *(7)* undo (shorcut: backspace)
     - *(8)* copy to clipboard
     - *(9)* save to `/tmp/annotated.jpg` (override setting `ANNOTATED` environment variable)
     - *(10)* toggle large mode (everything is magnified)
-    - *(11)* clear changes (remove all annotations)
+    - *(11)* clear changes (remove all annotations) (shortcut: "c")
 
 ## Example usage
 
