@@ -21,6 +21,8 @@ class BigSmallBut(Button):
         else:
             shapes.WIDGET_SCALE = 1
             self.bg = GREY
+        if self.gui.objects:
+            self.gui.dirty_annotation = True
 
 
 class SaveBut(Button):
