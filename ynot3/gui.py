@@ -70,35 +70,36 @@ class GUI:
         if event.pos[1] < self.statusbar_height:
             if self.statusbar.handle_event(event):
                 self.dirty_statusbar = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # left mouse button
-                self.dragging = True
+        else:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # left mouse button
+                    self.dragging = True
 
-                # Add a shape to the list of shapes
-                start_pos = Snap.getSnapped(event.pos)
-                start_pos[1] -= self.statusbar_height
-                shape = self.statusbar.selected_shape(
-                    color=self.statusbar.selected_color,
-                    start=start_pos,
-                    end=start_pos,
-                )
-                self.objects.append(shape)
-                self.dirty_annotation = True
-        elif event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:  # left mouse button
+                    # Add a shape to the list of shapes
+                    start_pos = Snap.getSnapped(event.pos)
+                    start_pos[1] -= self.statusbar_height
+                    shape = self.statusbar.selected_shape(
+                        color=self.statusbar.selected_color,
+                        start=start_pos,
+                        end=start_pos,
+                    )
+                    self.objects.append(shape)
+                    self.dirty_annotation = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:  # left mouse button
+                    if self.dragging:
+                        pos = Snap.getSnapped(event.pos)
+                        pos[1] -= self.statusbar_height
+                        self.objects[-1].end = pos
+                        self.dragging = False
+                        self.dirty_annotation = True
+            elif event.type == pygame.MOUSEMOTION:
                 if self.dragging:
-                    pos = Snap.getSnapped(event.pos)
+                    pos = list(event.pos)
                     pos[1] -= self.statusbar_height
-                    self.objects[-1].end = pos
-                    self.dragging = False
-                    self.dirty_annotation = True
-        elif event.type == pygame.MOUSEMOTION:
-            if self.dragging:
-                pos = list(event.pos)
-                pos[1] -= self.statusbar_height
-                if self.objects:
-                    self.objects[-1].end = pos
-                    self.dirty_annotation = True
+                    if self.objects:
+                        self.objects[-1].end = pos
+                        self.dirty_annotation = True
 
     def draw(self):
         if self.dirty_statusbar:
