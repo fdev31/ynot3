@@ -300,6 +300,11 @@ class Rectangle(Shape):
         else:
             pygame.draw.rect(
                 surface,
+                list(self.color) + [50],
+                self.rect,
+            )
+            pygame.draw.rect(
+                surface,
                 self.color,
                 self.rect,
                 width=1 if self.isDummy else self.thickness * WIDGET_SCALE,

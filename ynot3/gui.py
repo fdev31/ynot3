@@ -23,7 +23,6 @@ class GUI:
     def __init__(self, background: pygame.Surface) -> None:
         self.objects: list[shapes.Shape] = []
         self.dragging = False
-        self.canvas: None | pygame.Surface = None
         self.but_undo = BackBut(self)
         self.but_save = SaveBut(self)
         self.but_clear = ClearBut(self)
@@ -49,6 +48,9 @@ class GUI:
 
         self.background = background.convert_alpha()
         self.statusbar = StatusBar(self.screen, buttons, self.statusbar_height)
+        self.annotation_overlay = pygame.Surface(
+            self.background.get_size(), pygame.SRCALPHA
+        ).convert_alpha()
 
     def handle_event(self, event):
         if event.pos[1] < self.statusbar_height:
@@ -83,13 +85,13 @@ class GUI:
 
     def draw(self):
         self.statusbar.draw()
-
-        surf = self.background.copy()
-        self.canvas = surf
+        self.screen.blit(self.background, (0, self.statusbar_height))
+        self.annotation_overlay.fill((0, 0, 0, 0))
 
         for shape in self.objects:
-            shape.draw(surf)
-        self.screen.blit(surf, (0, self.statusbar_height))
+            shape.draw(self.annotation_overlay)
+
+        self.screen.blit(self.annotation_overlay, (0, self.statusbar_height))
 
         pygame.display.update()
 
