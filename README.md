@@ -33,7 +33,6 @@ Supported shapes:
     - *(10)* toggle large mode (everything is magnified)
     - *(11)* clear changes (remove all annotations) (shortcut: "c")
 
-Note: *(12)* is only here to demonstrate arrows usage
 
 ## Installation
 
