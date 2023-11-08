@@ -171,6 +171,8 @@ def main(image_path: str):
         gui.draw()
         clock.tick(60)
         pygame.display.flip()
+        gui.draw()
+        pygame.display.flip()
 
     gui.but_copy.execute()
     # Quit pygame
