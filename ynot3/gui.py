@@ -12,10 +12,10 @@ class Snap:
 
     @classmethod
     def getSnapped(cls, coord: tuple[int, int]) -> list[int]:
-        l = cls.level
-        if not l:
+        lvl = cls.level
+        if not lvl:
             return list(coord)
-        return [((l // 2 + coord[0]) // l) * l, ((l // 2 + coord[1]) // l) * l]
+        return [((lvl // 2 + coord[0]) // lvl) * lvl, ((lvl // 2 + coord[1]) // lvl) * lvl]
 
 
 class GUI:
@@ -46,19 +46,15 @@ class GUI:
                     StatusBar.estimateWidth(buttons, self.statusbar_height),
                 ),
                 bg_rect.height + self.statusbar_height,
-            )
+            ),
+            pygame.DOUBLEBUF,
+            vsync=1,
         )
 
         self.background = background
-        self.statusbar_surface = pygame.Surface(
-            (self.screen.get_width(), self.statusbar_height), pygame.SRCALPHA
-        ).convert_alpha()
-        self.statusbar = StatusBar(
-            self.statusbar_surface, buttons, self.statusbar_height
-        )
-        self.annotation_overlay = pygame.Surface(
-            self.background.get_size(), pygame.SRCALPHA
-        ).convert_alpha()
+        self.statusbar_surface = pygame.Surface((self.screen.get_width(), self.statusbar_height), pygame.SRCALPHA).convert_alpha()
+        self.statusbar = StatusBar(self.statusbar_surface, buttons, self.statusbar_height)
+        self.annotation_overlay = pygame.Surface(self.background.get_size(), pygame.SRCALPHA).convert_alpha()
 
     def get_annotated_image(self):
         surface = pygame.Surface(self.background.get_size(), pygame.SRCALPHA)
@@ -101,14 +97,17 @@ class GUI:
                         self.objects[-1].end = pos
                         self.dirty_annotation = True
 
-    def draw(self):
-        if self.dirty_statusbar:
+    def draw(self, force=False):
+        dirty = False
+        if force or self.dirty_statusbar:
+            dirty = True
             self.statusbar_surface.fill(GREY)
             self.statusbar.draw()
             self.screen.blit(self.statusbar_surface, (0, 0))
             self.dirty_statusbar = False
 
-        if self.dirty_annotation:
+        if force or self.dirty_annotation:
+            dirty = True
             self.screen.blit(self.background, (0, self.statusbar_height))
             self.annotation_overlay.fill((0, 0, 0, 0))
 
@@ -118,7 +117,8 @@ class GUI:
             self.screen.blit(self.annotation_overlay, (0, self.statusbar_height))
             self.dirty_annotation = False
 
-        pygame.display.update()
+        if dirty:
+            pygame.display.flip()
 
 
 def main(image_path: str):
@@ -133,11 +133,16 @@ def main(image_path: str):
     clock = pygame.time.Clock()
     # Game loop
     running = True
+
     while running:
+        # Update the screen
+        gui.draw()
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.WINDOWMOVED:  # FIXME: workaround for black screen
+                gui.draw(force=True)
             else:
                 if event.type in (
                     pygame.MOUSEBUTTONDOWN,
@@ -166,13 +171,7 @@ def main(image_path: str):
                         elif event.key == pygame.K_e:
                             gui.statusbar.selected_shape = shapes.Bullet
                             gui.dirty_statusbar = True
-
-        # Update the screen
-        gui.draw()
         clock.tick(60)
-        pygame.display.flip()
-        gui.draw()
-        pygame.display.flip()
 
     gui.but_copy.execute()
     # Quit pygame
