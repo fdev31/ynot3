@@ -15,7 +15,10 @@ class Snap:
         lvl = cls.level
         if not lvl:
             return list(coord)
-        return [((lvl // 2 + coord[0]) // lvl) * lvl, ((lvl // 2 + coord[1]) // lvl) * lvl]
+        return [
+            ((lvl // 2 + coord[0]) // lvl) * lvl,
+            ((lvl // 2 + coord[1]) // lvl) * lvl,
+        ]
 
 
 class GUI:
@@ -52,9 +55,15 @@ class GUI:
         )
 
         self.background = background
-        self.statusbar_surface = pygame.Surface((self.screen.get_width(), self.statusbar_height), pygame.SRCALPHA).convert_alpha()
-        self.statusbar = StatusBar(self.statusbar_surface, buttons, self.statusbar_height)
-        self.annotation_overlay = pygame.Surface(self.background.get_size(), pygame.SRCALPHA).convert_alpha()
+        self.statusbar_surface = pygame.Surface(
+            (self.screen.get_width(), self.statusbar_height), pygame.SRCALPHA
+        ).convert_alpha()
+        self.statusbar = StatusBar(
+            self.statusbar_surface, buttons, self.statusbar_height
+        )
+        self.annotation_overlay = pygame.Surface(
+            self.background.get_size(), pygame.SRCALPHA
+        ).convert_alpha()
 
     def get_annotated_image(self):
         surface = pygame.Surface(self.background.get_size(), pygame.SRCALPHA)
@@ -136,13 +145,11 @@ def main(image_path: str):
 
     while running:
         # Update the screen
-        gui.draw()
+        gui.draw(forced=True)
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.WINDOWMOVED:  # FIXME: workaround for black screen
-                gui.draw(force=True)
             else:
                 if event.type in (
                     pygame.MOUSEBUTTONDOWN,
